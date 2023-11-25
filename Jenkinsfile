@@ -15,7 +15,7 @@ pipeline {
             steps {
                 git branch: 'master',
                     //credentialsId: 'gitlab-cred',
-                    url: 'https://github.com/ashurock30/simple-java-maven-app.git'
+                    url: 'https://github.com/ashurock30/maven-project.git'
             }
         }
 
@@ -28,25 +28,25 @@ pipeline {
 
         stage('Build') {
             steps { 
-                withMaven(globalMavenSettingsConfig: '', jdk: 'JDK11', maven: 'Maven-3.9.5', mavenSettingsConfig: 'maven-settings', traceability: true) {
-                    sh 'mvn clean install deploy'
+                withMaven(globalMavenSettingsConfig: '', jdk: 'JDK11', maven: 'Maven-3.9.5', mavenSettingsConfig: '', traceability: true) {
+                    sh 'mvn clean install'
                 }
             }
         }
 
-        stage("Test Application") {
-           steps {
-               withMaven(globalMavenSettingsConfig: '', jdk: 'JDK11', maven: 'Maven-3.9.5', mavenSettingsConfig: 'maven-settings', traceability: true) { 
-                   sh "mvn test"
-               }
-           }
-       }
+    //     stage("Test Application") {
+    //        steps {
+    //            withMaven(globalMavenSettingsConfig: '', jdk: 'JDK11', maven: 'Maven-3.9.5', mavenSettingsConfig: 'maven-settings', traceability: true) { 
+    //                sh "mvn test"
+    //            }
+    //        }
+    //    }
 
        stage('Sonar Qube Scan With Project Creation') {
            steps {
                withSonarQubeEnv(credentialsId:'sonar-test',installationName:'SonarQube') {
-                   withMaven(globalMavenSettingsConfig: '', jdk: 'JDK11', maven: 'Maven-3.9.5', mavenSettingsConfig: 'maven-settings', traceability: true) {
-                       sh 'mvn sonar:sonar -Dsonar.projectKey=com.mycompany.app:my-app -Dsonar.projectName="Sonar-MyApp"'
+                   withMaven(globalMavenSettingsConfig: '', jdk: 'JDK11', maven: 'Maven-3.9.5', mavenSettingsConfig: '', traceability: true) {
+                       sh 'mvn sonar:sonar -Dsonar.projectKey=com.mycompany.app:maven-project-app -Dsonar.projectName="Maven-Test-MyApp"'
                    } 
                }
 
